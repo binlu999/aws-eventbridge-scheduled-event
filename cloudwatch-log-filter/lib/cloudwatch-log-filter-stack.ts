@@ -1,6 +1,7 @@
 import { Stack, StackProps } from 'aws-cdk-lib';
 import { Rule, Schedule } from 'aws-cdk-lib/aws-events';
 import { LambdaFunction } from 'aws-cdk-lib/aws-events-targets';
+import * as logs from 'aws-cdk-lib/aws-logs'
 import { Code, Function, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { Construct } from 'constructs';
 import {NodejsFunction} from 'aws-cdk-lib/aws-lambda-nodejs'
@@ -16,7 +17,8 @@ export class CloudwatchLogFilterStack extends Stack {
       runtime:Runtime.NODEJS_14_X,
       memorySize:512,
       entry:(join(__dirname,'../src/cronjob.ts')),
-      handler:'handler'
+      handler:'handler',
+      logRetention: logs.RetentionDays.THREE_DAYS
     });
 
     const cronRule = new Rule(this,'CronRule',{
